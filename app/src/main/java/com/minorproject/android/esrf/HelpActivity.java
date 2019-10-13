@@ -42,7 +42,7 @@ public class HelpActivity extends AppCompatActivity {
         btnSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                TOPIC = "/topics/userABC"; //topic must match with what the receiver subscribed to
+                TOPIC = "dpC9B8qww1s:APA91bEFsDJqEZgZ1K14nsLScBhOzdyp0BdUA-DJy8ZPlmDOd0Ml3dkGurxoKOSdfJjdddp6DEV8I_fen0mF7v4TlfAOcNnBSjoS30UBCWXvtQYsAOzxjeo0mElKeD7S90-rjqsl81kT"; //topic must match with what the receiver subscribed to
                 NOTIFICATION_TITLE = "Trial";
                 NOTIFICATION_MESSAGE = "Trial";
 
@@ -65,13 +65,13 @@ public class HelpActivity extends AppCompatActivity {
 
     private void sendNotification(JSONObject notification) {
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(FCM_API, notification,
-                new Response.Listener<JSONObject>() {
+        new com.android.volley.Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
                         Log.i(TAG, "onResponse: " + response.toString());;
                     }
                 },
-                new Response.ErrorListener() {
+                new com.android.volley.Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         Toast.makeText(HelpActivity.this, "Request error", Toast.LENGTH_LONG).show();
@@ -91,4 +91,4 @@ public class HelpActivity extends AppCompatActivity {
 
 
     }
-}
+

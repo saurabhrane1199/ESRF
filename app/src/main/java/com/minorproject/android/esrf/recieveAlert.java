@@ -40,9 +40,9 @@ public class recieveAlert extends FirebaseMessagingService{
     @Override
     public void onNewToken(@NonNull String s) {
         Log.d(TAG,s);
-        uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        /*uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
         dbref = FirebaseDatabase.getInstance().getReference("users");
-        dbref.child(uid).child("token").setValue(s);
+        dbref.child(uid).child("token").setValue(s);*/
     }
 
     @Override
