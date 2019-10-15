@@ -53,6 +53,7 @@ public class MainActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 currUser = dataSnapshot.getValue(User.class);
                 Log.d(TAG,"Heyy"+currUser.name);
+                checkToken();
             }
 
             @Override
@@ -62,11 +63,19 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
+
         toolBar = getSupportActionBar();
         BottomNavigationView nav = (BottomNavigationView)findViewById(R.id.navigation);
         nav.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         toolBar.setTitle("Shop");
         loadFragment(new HomeFragment());
+    }
+
+    void checkToken()
+    {
+        if(statics.token != currUser.token){
+            dbref.child("token").setValue(statics.token);
+        }
     }
 
     private void handlePermissions() {
