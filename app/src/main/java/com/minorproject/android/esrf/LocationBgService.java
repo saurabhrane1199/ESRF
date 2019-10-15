@@ -7,6 +7,8 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.IBinder;
 import android.util.Log;
+
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -14,10 +16,17 @@ import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.google.maps.android.PolyUtil;
+
+import java.util.ArrayList;
 
 
 public class LocationBgService extends Service {
@@ -32,12 +41,16 @@ public class LocationBgService extends Service {
     private User user;
     private String uid;
     private double latitude = 0.0, longitude = 0.0, altitude = 0.0;
-    private static final String TAG = "Debug";
+    private static final String TAG = "LocationBgService";
+    DatabaseReference dbref,userdbref;
+    ArrayList<com.minorproject.android.esrf.Location> listRes;
 
     @Override
     public void onCreate() {
+
         Log.d(TAG, "onCreate: ");
     }
+
 
 
     @Override
@@ -47,12 +60,26 @@ public class LocationBgService extends Service {
     }
 
     private void init(Intent intent) {
-        //firebase
+
         auth = FirebaseAuth.getInstance();
         firebaseUser = auth.getCurrentUser();
         databaseReference = FirebaseDatabase.getInstance().getReference("users");
         uid = firebaseUser.getUid();
         Log.d(TAG,uid);
+
+        userdbref = databaseReference.child(uid);
+        userdbref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                user = dataSnapshot.getValue(User.class);
+                Log.d(TAG,"Heyy"+user.name);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Log.d(TAG,"Error ocurred"+databaseError.toException());
+            }
+        });
 
 
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
@@ -82,6 +109,7 @@ public class LocationBgService extends Service {
                             databaseReference.child(uid).child("altitude").setValue(altitude);
                         }
                         Log.d(TAG, "Latitude: " + latitude + "\nLongitude: " + longitude + "\nAltitude: " + altitude);
+                        mappingInit();
                     }
                 }
             }
@@ -109,4 +137,71 @@ public class LocationBgService extends Service {
     @Nullable
     @Override
     public IBinder onBind(Intent intent) { return null; }
+
+    void mappingInit(){
+        dbref = FirebaseDatabase.getInstance().getReference("locations");
+        dbref.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                listRes = new ArrayList<>();
+
+                for (DataSnapshot dataValues : dataSnapshot.getChildren()){
+                    com.minorproject.android.esrf.Location location = dataValues.getValue(com.minorproject.android.esrf.Location.class);
+                    listRes.add(location);
+                    Log.d(TAG,location.name);
+                }
+
+                getLocationName(listRes);
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                // Failed to read value
+                Log.w(TAG, "Failed to read value.", error.toException());
+            }
+        });
+
+    }
+
+    void getLocationName(ArrayList<com.minorproject.android.esrf.Location> listRes){
+        String lName="Error Detecting Location";
+        boolean flag = false;
+        ArrayList<LatLng> c = new ArrayList<>();
+        for(int i=0 ;i<listRes.size() ;i++){
+            c = googleMapsObject(listRes.get(i).coords);
+            flag = PolyUtil.containsLocation(19.123182,72.836271,c,true);
+            if(flag)
+            {
+                lName = listRes.get(i).name;
+                break;
+            }
+        }
+        statics.currentLoc = lName;
+        Log.d(TAG,"So your location is"+lName);
+
+
+    }
+
+    ArrayList<LatLng> googleMapsObject(ArrayList<com.minorproject.android.esrf.LatLng> c){
+        ArrayList<LatLng> newList = new ArrayList<>();
+        for(int i=0;i<c.size();i++)
+        {
+            //System.out.println(c.get(i).latitude);
+            newList.add(new LatLng(c.get(i).latitude,c.get(i).longitude));
+        }
+
+        return newList;
+
+    }
+
+
+
+
+
+
+
+
+
 }

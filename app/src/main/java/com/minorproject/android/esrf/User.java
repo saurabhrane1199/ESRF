@@ -16,6 +16,7 @@ public class User implements Serializable {
     public String bloodgroup;
     public String token;
 
+
     public User(){
 
     }
