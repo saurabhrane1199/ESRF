@@ -9,6 +9,7 @@ import androidx.fragment.app.FragmentTransaction;
 
 import android.Manifest;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
@@ -17,21 +18,23 @@ import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.database.annotations.NotNull;
+import com.minorproject.android.esrf.Fragment.FirstAid;
+import com.minorproject.android.esrf.Fragment.HomeFragment;
+import com.minorproject.android.esrf.Fragment.UserFragment;
+import com.minorproject.android.esrf.Helping_Classes.statics;
+import com.minorproject.android.esrf.Models.User;
+import com.minorproject.android.esrf.Services.LocationBgService;
 
 public class MainActivity extends AppCompatActivity {
 
     private ActionBar toolBar;
     public Intent serviceIntent;
-    public Intent intent;
     public User currUser;
-    public Bundle b;
     public static final String TAG ="Main Activity";
     public String uid;
     public DatabaseReference dbref;
@@ -41,42 +44,23 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        serviceIntent = new Intent(MainActivity.this,LocationBgService.class);
+        serviceIntent = new Intent(MainActivity.this, LocationBgService.class);
         handlePermissions();
         startService(serviceIntent);
-        uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        dbref = FirebaseDatabase.getInstance().getReference("/users/"+uid);
-
-
-        dbref.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                currUser = dataSnapshot.getValue(User.class);
-                Log.d(TAG,"Heyy"+currUser.name);
-                checkToken();
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                Log.d(TAG,"Error ocurred"+databaseError.toException());
-            }
-        });
-
-
-
         toolBar = getSupportActionBar();
-        BottomNavigationView nav = (BottomNavigationView)findViewById(R.id.navigation);
+        BottomNavigationView nav = findViewById(R.id.navigation);
         nav.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
-        toolBar.setTitle("Shop");
+        toolBar.setTitle("Home");
         loadFragment(new HomeFragment());
     }
 
-    void checkToken()
-    {
-        if(statics.token != currUser.token){
-            dbref.child("token").setValue(statics.token);
-        }
+    @Override
+    protected void onStart() {
+        super.onStart();
+        SharedPreferences pref = getApplicationContext().getSharedPreferences("tokens", 0); // 0 - for private mode
+        statics.token = pref.getString("token_value",null);
     }
+
 
     private void handlePermissions() {
         int locationRequestCode = 1000;
@@ -86,7 +70,6 @@ public class MainActivity extends AppCompatActivity {
                     locationRequestCode);
         else{
             startService(serviceIntent);
-            //startActivity(new Intent(helpScreen.this,LocationMapTrial.class));
         }
     }
 
@@ -100,7 +83,6 @@ public class MainActivity extends AppCompatActivity {
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED){
                     startService(serviceIntent);
-                    //startActivity(new Intent(helpScreen.this,LocationMapTrial.class));
                 }
                 else
                     Toast.makeText(this, "Permissions denied", Toast.LENGTH_SHORT).show();
@@ -120,7 +102,6 @@ public class MainActivity extends AppCompatActivity {
                 case R.id.navigation_user:
                     toolBar.setTitle("Shop");
                     fragment = new UserFragment();
-                    fragment.setArguments(b);
                     loadFragment(fragment);
                     return true;
                 case R.id.navigation_home:

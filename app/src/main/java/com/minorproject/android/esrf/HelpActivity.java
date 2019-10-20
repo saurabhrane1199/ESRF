@@ -3,7 +3,7 @@ package com.minorproject.android.esrf;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.Activity;
+import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -13,7 +13,6 @@ import android.widget.Toast;
 import com.android.volley.AuthFailureError;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.google.android.gms.common.api.Response;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -21,7 +20,10 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.minorproject.android.esrf.Helping_Classes.statics;
+import com.minorproject.android.esrf.Models.User;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -31,57 +33,90 @@ import java.util.Map;
 
 public class HelpActivity extends AppCompatActivity {
 
+
     final private String FCM_API = "https://fcm.googleapis.com/fcm/send";
     final private String serverKey = "key=" + "AAAAaG8hVck:APA91bEovU1VFr4U0CfGywVMLIyc6-eTNLizPGClb56yF7E_p2y0f2D4_8Nnv_TBXlOCSYINc-cycXMjcTOa9J8AjyF_GgZlhQWY-DtLYrcKxfjTGeFv0of7VDh2NXw-flWRO4_zBobb";
     final private String contentType = "application/json";
     final String TAG = "NOTIFICATION TAG";
-
-    User currUser;
-    String uid;
-    DatabaseReference dbref;
-
-
-    String tokentemp;
-
-    String NOTIFICATION_TITLE;
-    String NOTIFICATION_MESSAGE;
-    String TOPIC;
-
+    private User currUser;
+    private String NOTIFICATION_TITLE;
+    private String NOTIFICATION_MESSAGE;
+    private ArrayList<String> tokenList;
+    private Location userLoc;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_help);
         Button btnSend = findViewById(R.id.button);
-        //tokenList = new ArrayList<>();
-        userInit();
+        tokenList = new ArrayList<>();
+        currUser =(User)getIntent().getSerializableExtra("currUser");
+        userLoc.setLatitude(currUser.latitude);
+        userLoc.setLongitude(currUser.longitude);
+
+        Log.d("Intent Value",currUser.name);
+        populateTokenList();
         btnSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TOPIC = "dpC9B8qww1s:APA91bEFsDJqEZgZ1K14nsLScBhOzdyp0BdUA-DJy8ZPlmDOd0Ml3dkGurxoKOSdfJjdddp6DEV8I_fen0mF7v4TlfAOcNnBSjoS30UBCWXvtQYsAOzxjeo0mElKeD7S90-rjqsl81kT"; //topic must match with what the receiver subscribed to
-                TOPIC = getTokenFormat();
-                //TOPIC = "cn8WzUWkiH0:APA91bGr2Q6bsO_IiuWIKpv5ZZSs7zIGrHziGEkdmmL5xjCJoSBArp5-Rnl8Rb9_DFv-Pr4ng7t-E9rjbdAhDT6h86RES5PPCxktQd-irrHZjpcwBR_udBP5UuuwRlXwEBngjOqYLcMi";
                 NOTIFICATION_TITLE = "Help";
-                NOTIFICATION_MESSAGE = "Trial";
-
+                NOTIFICATION_MESSAGE = statics.currentLoc;
                 JSONObject notification = new JSONObject();
                 JSONObject notifcationBody = new JSONObject();
+                JSONArray  jsonArray = new JSONArray(tokenList);
                 try {
                     notifcationBody.put("title", NOTIFICATION_TITLE);
                     notifcationBody.put("message", NOTIFICATION_MESSAGE);
-
-                    notification.put("to", TOPIC);
+                    notification.put("registration_ids", jsonArray);
                     notification.put("data", notifcationBody);
                 } catch (JSONException e) {
                     Log.e(TAG, "onCreate: " + e.getMessage() );
                 }
+                Log.d("TOKEN SIZE",Integer.toString(tokenList.size()));
                 sendNotification(notification);
+            }
+        });
+
+    }
+
+
+
+    public void populateTokenList(){
+
+        DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("users");
+        userRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                User temp;
+                for(DataSnapshot dataValue : dataSnapshot.getChildren()){
+                   temp = dataValue.getValue(User.class);
+                   /*if(temp.name.equals(currUser.er.name1) || temp.name.equals(currUser.er.name2) ){
+                        //tokenByName(temp);
+                   }*/
+                   if(ifLocation(temp)){
+                       tokenByLocation(temp);
+
+                   }
+
+
+
+                }
+
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
 
             }
         });
+
+
     }
 
+
     private void sendNotification(JSONObject notification) {
+
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(FCM_API, notification,
         new com.android.volley.Response.Listener<JSONObject>() {
                     @Override
@@ -107,70 +142,27 @@ public class HelpActivity extends AppCompatActivity {
         MySingleton.getInstance(getApplicationContext()).addToRequestQueue(jsonObjectRequest);
     }
 
-
-    public void userInit()
-    {
-        uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        dbref = FirebaseDatabase.getInstance().getReference("users/"+uid);
-        dbref.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                currUser = dataSnapshot.getValue(User.class);
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-    }
-
-    public String getTokenFormat(){
-        String token,nameToken1,nameToken2;
-        nameToken1=tokenByName(currUser.er.name1);
-        //nameToken2=tokenByName(currUser.er.name2);
-        token = nameToken1;
-        //token="Trial";
-        Log.d("Final Token",token);
-        return token;
-    }
-
-    public String tokenByName(final String name){
-
-        //final String[] nameToken={""};
-
-        dbref = FirebaseDatabase.getInstance().getReference("users");
-        dbref.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-
-
-                for(DataSnapshot dataValue : dataSnapshot.getChildren()){
-                    User temp = dataValue.getValue(User.class);
-                    if(temp.name.equals(name))
-                    {
-                        //tokenList.add(temp.token);
-                        tokentemp = temp.token;
-                        Log.d("Inside tokenByName",temp.token);
-                        Log.d("Inside tokenByName","Value of name is"+tokentemp);
-
-                        break;
-                    }
-                }
-            }
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError)
-            {
-
-            }
-
-        });
-
-        return tokentemp;
+    private boolean ifLocation(User user){
+        float[] distances = new float[1];
+        Location.distanceBetween(currUser.latitude,
+                currUser.longitude,
+                user.latitude,
+                user.longitude, distances);
+        return 5000.0 < distances[0];
 
     }
 
-
+    public void tokenByLocation(User temp){
+        tokenList.add(temp.token);
 
     }
+
+    public void tokenByName(User temp){
+            tokenList.add(temp.token);
+        }
+
+
+
+
+}
 

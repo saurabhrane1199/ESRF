@@ -3,6 +3,7 @@ package com.minorproject.android.esrf;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -13,6 +14,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.minorproject.android.esrf.Helping_Classes.statics;
+import com.minorproject.android.esrf.Models.User;
 
 public class register extends AppCompatActivity {
     EditText name,email,number,er1name,er2name,er1no,er2no,bg;
@@ -20,6 +23,7 @@ public class register extends AppCompatActivity {
     User user;
     DatabaseReference dbref;
     FirebaseUser mAuth;
+    String uid;
     public static final String TAG = "register.java";
 
     @Override
@@ -36,7 +40,17 @@ public class register extends AppCompatActivity {
         });
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        SharedPreferences pref = getApplicationContext().getSharedPreferences("tokens", 0); // 0 - for private mode
+        statics.token = pref.getString("token_value",null);
+        DatabaseReference dbref = FirebaseDatabase.getInstance().getReference();
+        dbref.child("users").child(uid).child(statics.token);
+    }
+
     void init(){
+        uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
         name = (EditText)findViewById(R.id.name);
         email = (EditText)findViewById(R.id.email);
         number = (EditText)findViewById(R.id.number);
@@ -65,7 +79,6 @@ public class register extends AppCompatActivity {
     }
 
     void submitDataToFb(User u){
-        String uid = mAuth.getUid();
         dbref = FirebaseDatabase.getInstance().getReference();
         dbref.child("users").child(uid).setValue(u);
         Log.d(TAG,"Entered submitDataToFb");

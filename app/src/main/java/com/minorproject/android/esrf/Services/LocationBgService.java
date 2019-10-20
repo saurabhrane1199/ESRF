@@ -1,4 +1,4 @@
-package com.minorproject.android.esrf;
+package com.minorproject.android.esrf.Services;
 
 import android.Manifest;
 import android.app.Service;
@@ -25,6 +25,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.maps.android.PolyUtil;
+import com.minorproject.android.esrf.Models.User;
+import com.minorproject.android.esrf.Helping_Classes.statics;
 
 import java.util.ArrayList;
 
@@ -43,7 +45,7 @@ public class LocationBgService extends Service {
     private double latitude = 0.0, longitude = 0.0, altitude = 0.0;
     private static final String TAG = "LocationBgService";
     DatabaseReference dbref,userdbref;
-    ArrayList<com.minorproject.android.esrf.Location> listRes;
+    ArrayList<com.minorproject.android.esrf.Models.Location> listRes;
 
     @Override
     public void onCreate() {
@@ -65,14 +67,14 @@ public class LocationBgService extends Service {
         firebaseUser = auth.getCurrentUser();
         databaseReference = FirebaseDatabase.getInstance().getReference("users");
         uid = firebaseUser.getUid();
-        Log.d(TAG,uid);
+        //Log.d(TAG,uid);
 
         userdbref = databaseReference.child(uid);
         userdbref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 user = dataSnapshot.getValue(User.class);
-                Log.d(TAG,"Heyy"+user.name);
+                //Log.d(TAG,"Heyy"+user.name);
             }
 
             @Override
@@ -108,7 +110,7 @@ public class LocationBgService extends Service {
                             databaseReference.child(uid).child("longitude").setValue(longitude);
                             databaseReference.child(uid).child("altitude").setValue(altitude);
                         }
-                        Log.d(TAG, "Latitude: " + latitude + "\nLongitude: " + longitude + "\nAltitude: " + altitude);
+                        //Log.d(TAG, "Latitude: " + latitude + "\nLongitude: " + longitude + "\nAltitude: " + altitude);
                         mappingInit();
                     }
                 }
@@ -147,9 +149,9 @@ public class LocationBgService extends Service {
                 listRes = new ArrayList<>();
 
                 for (DataSnapshot dataValues : dataSnapshot.getChildren()){
-                    com.minorproject.android.esrf.Location location = dataValues.getValue(com.minorproject.android.esrf.Location.class);
+                    com.minorproject.android.esrf.Models.Location location = dataValues.getValue(com.minorproject.android.esrf.Models.Location.class);
                     listRes.add(location);
-                    Log.d(TAG,location.name);
+                    //Log.d(TAG,location.name);
                 }
 
                 getLocationName(listRes);
@@ -165,7 +167,7 @@ public class LocationBgService extends Service {
 
     }
 
-    void getLocationName(ArrayList<com.minorproject.android.esrf.Location> listRes){
+    void getLocationName(ArrayList<com.minorproject.android.esrf.Models.Location> listRes){
         String lName="Error Detecting Location";
         boolean flag = false;
         ArrayList<LatLng> c = new ArrayList<>();
@@ -179,12 +181,12 @@ public class LocationBgService extends Service {
             }
         }
         statics.currentLoc = lName;
-        Log.d(TAG,"So your location is"+lName);
+        //Log.d(TAG,"So your location is"+lName);
 
 
     }
 
-    ArrayList<LatLng> googleMapsObject(ArrayList<com.minorproject.android.esrf.LatLng> c){
+    ArrayList<LatLng> googleMapsObject(ArrayList<com.minorproject.android.esrf.Models.LatLng> c){
         ArrayList<LatLng> newList = new ArrayList<>();
         for(int i=0;i<c.size();i++)
         {

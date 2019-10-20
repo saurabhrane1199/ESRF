@@ -1,8 +1,13 @@
-package com.minorproject.android.esrf;
+package com.minorproject.android.esrf.Models;
+
+
 
 import com.google.firebase.database.IgnoreExtraProperties;
+import com.minorproject.android.esrf.Helping_Classes.statics;
 
 import java.io.Serializable;
+
+
 
 @IgnoreExtraProperties
 public class User implements Serializable {
@@ -17,12 +22,13 @@ public class User implements Serializable {
     public String token;
 
 
+
     public User(){
 
     }
 
 
-    public User(String name, String email, Double latitude, Double longitude, Double altitude, String number,String n1,String n2,String no1,String no2,String bloodgroup){
+    public User(String name, String email, Double latitude, Double longitude, Double altitude, String number,String n1,String n2,String no1,String no2,String bloodgroup) {
         this.name = name;
         this.email = email;
         this.latitude = latitude;
@@ -34,6 +40,10 @@ public class User implements Serializable {
         this.er.number1 = no1;
         this.er.number2 = no2;
         this.bloodgroup = bloodgroup;
+        if (statics.token != null)
+        {
+            this.token = statics.token;
+        }
     }
 
 }

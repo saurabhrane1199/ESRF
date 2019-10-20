@@ -21,14 +21,14 @@
         android:theme="@style/AppTheme">
         <activity android:name=".alertResponseActivity"></activity>
 
-        <service android:name=".recieveAlert">
+        <service android:name=".Services.recieveAlert">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
             </intent-filter>
         </service>
         <service
-            android:name=".LocationBgService"
+            android:name=".Services.LocationBgService"
             android:enabled="true"
             android:exported="true" />
 

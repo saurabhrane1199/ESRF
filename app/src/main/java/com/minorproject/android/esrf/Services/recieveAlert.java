@@ -1,18 +1,17 @@
-package com.minorproject.android.esrf;
+package com.minorproject.android.esrf.Services;
 
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
-import android.os.IBinder;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -24,6 +23,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
+import com.minorproject.android.esrf.R;
+import com.minorproject.android.esrf.alertResponseActivity;
+import com.minorproject.android.esrf.Helping_Classes.statics;
 
 import java.util.Random;
 
@@ -39,10 +41,19 @@ public class recieveAlert extends FirebaseMessagingService{
 
     @Override
     public void onNewToken(@NonNull String s) {
+
+        SharedPreferences pref = getApplicationContext().getSharedPreferences("tokens", 0); // 0 - for private mode
+        SharedPreferences.Editor editor = pref.edit();
+        editor.putString("token_value",s);
+        editor.commit();
+
         if(FirebaseAuth.getInstance().getCurrentUser() != null){
+            Log.d(TAG, s);
+            statics.token = s;
             uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
-            dbref = FirebaseDatabase.getInstance().getReference("users/"+uid);
+            dbref = FirebaseDatabase.getInstance().getReference().child("users").child(uid);
             dbref.child("token").setValue(s);
+
         }
         else {
             Log.d(TAG, s);

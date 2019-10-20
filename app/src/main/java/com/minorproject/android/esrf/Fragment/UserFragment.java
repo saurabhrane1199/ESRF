@@ -1,4 +1,4 @@
-package com.minorproject.android.esrf;
+package com.minorproject.android.esrf.Fragment;
 
 import android.content.Context;
 import android.net.Uri;
@@ -9,6 +9,9 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.minorproject.android.esrf.Models.User;
+import com.minorproject.android.esrf.R;
 
 public class UserFragment extends Fragment {
 

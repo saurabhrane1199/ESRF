@@ -7,102 +7,117 @@
     android:paddingLeft="16dp"
     android:paddingRight="16dp"
     android:orientation="vertical"
-    android:background="#383838">
+    android:background="#383838"
+    >
+    <ScrollView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
 
-    <TextView
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Register with your details"
-        android:textColor="@color/colorAccent"
-        android:textSize="25sp"/>
+        android:orientation="vertical">
 
-    <EditText
-        android:id="@+id/name"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Enter your name"
-        android:textColorHint="@color/colorAccent"
-        android:textColor="@color/colorAccent"
-        android:padding="20dp"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Register with your details"
+            android:textColor="@color/colorAccent"
+            android:textSize="25sp"/>
 
-    <EditText
-        android:id="@+id/email"
-        android:inputType="textEmailAddress"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Enter your email"
-        android:textColorHint="@color/colorAccent"
-        android:textColor="@color/colorAccent"
-        android:padding="20dp"/>
+        <EditText
+            android:id="@+id/name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Enter your name"
+            android:textColorHint="@color/colorAccent"
+            android:textColor="@color/colorAccent"
+            android:padding="20dp"/>
 
-    <EditText
-        android:id="@+id/number"
-        android:inputType="phone"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Enter your number"
-        android:textColorHint="@color/colorAccent"
-        android:textColor="@color/colorAccent"
-        android:padding="20dp"/>
+        <EditText
+            android:id="@+id/email"
+            android:inputType="textEmailAddress"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Enter your email"
+            android:textColorHint="@color/colorAccent"
+            android:textColor="@color/colorAccent"
+            android:padding="20dp"/>
 
-    <EditText
-        android:id="@+id/er1name"
-        android:inputType="text"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Er 1 name"
-        android:textColorHint="@color/colorAccent"
-        android:textColor="@color/colorAccent"
-        android:padding="20dp"/>
+        <EditText
+            android:id="@+id/number"
+            android:inputType="phone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Enter your number"
+            android:textColorHint="@color/colorAccent"
+            android:textColor="@color/colorAccent"
+            android:padding="20dp"/>
 
-    <EditText
-        android:id="@+id/er2name"
-        android:inputType="text"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Er 2 name"
-        android:textColorHint="@color/colorAccent"
-        android:textColor="@color/colorAccent"
-        android:padding="20dp"/>
+        <EditText
+            android:id="@+id/er1name"
+            android:inputType="text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Er 1 name"
+            android:textColorHint="@color/colorAccent"
+            android:textColor="@color/colorAccent"
+            android:padding="20dp"/>
 
-    <EditText
-        android:id="@+id/er1no"
-        android:inputType="phone"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Er 1 no"
-        android:textColorHint="@color/colorAccent"
-        android:textColor="@color/colorAccent"
-        android:padding="20dp"/>
+        <EditText
+            android:id="@+id/er2name"
+            android:inputType="text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Er 2 name"
+            android:textColorHint="@color/colorAccent"
+            android:textColor="@color/colorAccent"
+            android:padding="20dp"/>
 
-    <EditText
-        android:id="@+id/er2no"
-        android:inputType="phone"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Er 2 no"
-        android:textColorHint="@color/colorAccent"
-        android:textColor="@color/colorAccent"
-        android:padding="20dp"/>
+        <EditText
+            android:id="@+id/er1no"
+            android:inputType="phone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Er 1 no"
+            android:textColorHint="@color/colorAccent"
+            android:textColor="@color/colorAccent"
+            android:padding="20dp"/>
 
-    <EditText
-        android:id="@+id/bg"
-        android:inputType="text"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="BloodGroup"
-        android:textColorHint="@color/colorAccent"
-        android:textColor="@color/colorAccent"
-        android:padding="20dp"/>
+        <EditText
+            android:id="@+id/er2no"
+            android:inputType="phone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Er 2 no"
+            android:textColorHint="@color/colorAccent"
+            android:textColor="@color/colorAccent"
+            android:padding="20dp"/>
 
-    <Button
-        android:id="@+id/submit"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Submit"
-        android:textColor="@color/colorAccent"
-        android:textColorHint="@color/colorAccent"/>
+        <EditText
+            android:id="@+id/bg"
+            android:inputType="text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="BloodGroup"
+            android:textColorHint="@color/colorAccent"
+            android:textColor="@color/colorAccent"
+            android:padding="20dp"/>
 
+        <Button
+            android:id="@+id/submit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Submit"
+            android:textColor="@color/colorAccent"
+            android:textColorHint="@color/colorAccent"/>
+
+
+
+
+    </LinearLayout>
+
+    </ScrollView>
 
 
 </LinearLayout>

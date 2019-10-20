@@ -1,4 +1,4 @@
-package com.minorproject.android.esrf;
+package com.minorproject.android.esrf.Models;
 
 import com.google.firebase.database.IgnoreExtraProperties;
 

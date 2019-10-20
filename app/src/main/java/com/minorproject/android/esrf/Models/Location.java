@@ -1,6 +1,7 @@
-package com.minorproject.android.esrf;
+package com.minorproject.android.esrf.Models;
 
 import com.google.firebase.database.IgnoreExtraProperties;
+import com.minorproject.android.esrf.Models.LatLng;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -8,7 +9,7 @@ import java.util.ArrayList;
 @IgnoreExtraProperties
 public class Location implements Serializable {
     public String name;
-    public ArrayList<com.minorproject.android.esrf.LatLng> coords;
+    public ArrayList<LatLng> coords;
 
     public Location(){
 

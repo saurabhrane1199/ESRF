@@ -43,7 +43,7 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        mSignInButton = (SignInButton)findViewById(R.id.sign_in_button);
+        mSignInButton = findViewById(R.id.sign_in_button);
         mSignInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -102,14 +102,14 @@ public class LoginActivity extends AppCompatActivity {
                             dbref.addListenerForSingleValueEvent(new ValueEventListener() {
                                 @Override
                                 public void onDataChange(DataSnapshot snapshot) {
-                                    if (snapshot.getValue() == null) {
+                                    if (snapshot.getValue()==null) {
                                         startActivity(new Intent(LoginActivity.this,register.class));
                                         finish();
                                     }
                                     else{
-                                        User user = snapshot.getValue(User.class);
+                                        //User user = snapshot.getValue(User.class);
                                         Intent intent = new Intent(LoginActivity.this,MainActivity.class);
-                                        intent.putExtra("curruser",user);
+                                        //intent.putExtra("curruser",user);
                                         startActivity(intent);
                                         finish();
                                     }
