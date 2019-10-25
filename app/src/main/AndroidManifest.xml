@@ -19,7 +19,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".alertResponseActivity"></activity>
+        <activity android:name=".FirstAidList"></activity>
+        <activity android:name=".alertResponseActivity" />
 
         <service android:name=".Services.recieveAlert">
             <intent-filter>

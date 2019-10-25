@@ -3,6 +3,9 @@ package com.minorproject.android.esrf;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
+import android.app.ProgressDialog;
+import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
@@ -43,6 +46,7 @@ public class HelpActivity extends AppCompatActivity {
     private String NOTIFICATION_MESSAGE;
     private ArrayList<String> tokenList;
     private Location userLoc;
+    private ProgressDialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +55,12 @@ public class HelpActivity extends AppCompatActivity {
         //userLoc = new Location("gps");
         currUser =(User)getIntent().getSerializableExtra("currUser");
         Button btnSend = findViewById(R.id.button);
+        dialog = new ProgressDialog(HelpActivity.this); // this = YourActivity
+        dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        dialog.setTitle("Loading");
+        dialog.setMessage("Alerting Emergency Services and People Near You...");
+        dialog.setIndeterminate(true);
+        dialog.setCanceledOnTouchOutside(false);
         tokenList = new ArrayList<>();
         //userLoc.setLatitude(currUser.latitude);
         //userLoc.setLongitude(currUser.longitude);
@@ -60,6 +70,7 @@ public class HelpActivity extends AppCompatActivity {
         btnSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                dialog.show();
                 NOTIFICATION_TITLE = "Help";
                 NOTIFICATION_MESSAGE = statics.currentLoc;
                 JSONObject notification = new JSONObject();
@@ -123,6 +134,8 @@ public class HelpActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(JSONObject response) {
                         Log.i(TAG, "onResponse: " + response.toString());
+                        dialog.dismiss();
+                        startActivity(new Intent(HelpActivity.this,FirstAidList.class));
                     }
                 },
                 new com.android.volley.Response.ErrorListener() {
@@ -130,6 +143,7 @@ public class HelpActivity extends AppCompatActivity {
                     public void onErrorResponse(VolleyError error) {
                         Toast.makeText(HelpActivity.this, "Request error", Toast.LENGTH_LONG).show();
                         Log.i(TAG, "onErrorResponse: Didn't work");
+                        dialog.dismiss();
                     }
                 }){
             @Override
@@ -146,11 +160,11 @@ public class HelpActivity extends AppCompatActivity {
     private boolean ifLocation(User user){
         float[] distances = new float[1];
         boolean flag = true;
-        Location.distanceBetween(currUser.latitude,
-                currUser.longitude,
+        Location.distanceBetween(statics.currLat,
+                statics.currLong,
                 user.latitude,
                 user.longitude, distances);
-        //flag = distances[0]<1000.0;
+        flag = distances[0]<2000.0;
 
         return flag;
     }

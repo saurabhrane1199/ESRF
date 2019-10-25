@@ -69,8 +69,10 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
+        DatabaseReference tokenref = FirebaseDatabase.getInstance().getReference().child("users").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("token");
         SharedPreferences pref = getApplicationContext().getSharedPreferences("tokens", 0); // 0 - for private mode
         statics.token = pref.getString("token_value",null);
+        tokenref.setValue(statics.token);
     }
 
 
