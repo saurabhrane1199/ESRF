@@ -1,14 +1,120 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Fragment.UserFragment">
-
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    tools:context=".MainActivity"
+    android:orientation="vertical"
+    >
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="User" />
+        android:layout_height="200dp"
+        android:background="@drawable/user_gradient"
+        android:orientation="horizontal"
+        >
 
-</FrameLayout>
+        <ImageView
+            android:id="@+id/edit"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_margin="20dp"
+            android:layout_alignParentEnd="true"
+            android:src="@drawable/ic_edit_black_24dp" />
+
+
+    </RelativeLayout>
+    <ImageView
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="-75dp"
+        android:id="@+id/profileScreen"
+        android:layout_width="150dp"
+        android:layout_height="150dp" />
+    <TextView
+        android:layout_margin="20dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="30sp"
+        android:id="@+id/name"
+        android:text="__USER__"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/numberPlace"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:text="Number"
+            android:layout_marginLeft="40dp"
+            android:textSize="20sp" />
+        <TextView
+            android:id="@+id/number"
+            android:padding="10dp"
+            android:layout_marginLeft="40dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="30sp"
+            android:layout_below="@+id/numberPlace"
+            android:text="588555"/>
+
+        <TextView
+            android:id="@+id/bloodGroupPlace"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:paddingRight="20dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="40dp"
+            android:text="Blood Group"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/bg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/bloodGroupPlace"
+            android:layout_alignParentRight="true"
+            android:padding="10dp"
+            android:layout_marginRight="40dp"
+            android:text="588555"
+            android:textSize="30sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Emergency Contacts"
+            android:textSize="25sp"
+            android:layout_margin="20dp"
+            android:layout_below="@+id/bg"
+            android:id="@+id/emerPlace"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/name1"
+            android:text="Name 1"
+            android:textSize="25sp"
+            android:layout_marginLeft="20dp"
+            android:layout_below="@+id/emerPlace"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/name2"
+            android:text="Name 2"
+            android:textSize="25sp"
+            android:layout_marginTop="20dp"
+            android:layout_marginLeft="20dp"
+            android:layout_below="@+id/name1"
+            />
+
+
+    </RelativeLayout>
+
+
+
+</LinearLayout>

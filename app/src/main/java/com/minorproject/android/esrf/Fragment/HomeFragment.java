@@ -8,6 +8,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,7 +30,7 @@ public class HomeFragment extends Fragment {
 
     final static String TAG="Home Fragment";
     private OnFragmentInteractionListener mListener;
-    private User user;
+    private User currUser;
     private DatabaseReference dbref;
     Intent intent;
 
@@ -39,6 +40,12 @@ public class HomeFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            currUser = (User) getArguments().getSerializable("curruser");
+            Log.d("User in Home Frag",currUser.name);
+        }
+
+        //getUser();
     }
 
     @Override
@@ -47,21 +54,22 @@ public class HomeFragment extends Fragment {
     {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         RippleBackground rippleBackground=(RippleBackground)view.findViewById(R.id.content);
-        rippleBackground.startRippleAnimation();
         intent = new Intent(getActivity(),HelpActivity.class);
         ImageView iv = (ImageView)view.findViewById(R.id.centerImage);
-        getUser();
-        iv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                intent.putExtra("currUser",user);
-                startActivity(intent);
-            }
-        });
+
+            rippleBackground.startRippleAnimation();
+            iv.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    intent.putExtra("currUser", currUser);
+                    startActivity(intent);
+                }
+            });
+
         return view;
     }
 
-    public void getUser(){
+    /*public void getUser(){
 
 
         final String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
@@ -78,7 +86,7 @@ public class HomeFragment extends Fragment {
 
             }
         });
-    }
+    }*/
 
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {

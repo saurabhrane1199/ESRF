@@ -28,6 +28,7 @@ package com.minorproject.android.esrf;
         import com.google.firebase.database.DatabaseReference;
         import com.google.firebase.database.FirebaseDatabase;
         import com.google.firebase.database.ValueEventListener;
+        import com.minorproject.android.esrf.Models.User;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -36,7 +37,9 @@ public class LoginActivity extends AppCompatActivity {
     private static final String TAG = "SignInActivity";
     private static final int RC_SIGN_IN = 9001;
     private FirebaseAuth mAuth;
+    private FirebaseUser user;
     private DatabaseReference dbref;
+    private User currUser;
 
 
     @Override
@@ -63,6 +66,34 @@ public class LoginActivity extends AppCompatActivity {
     private void signIn(){
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
         startActivityForResult(signInIntent, RC_SIGN_IN);
+    }
+
+    private void getUser(FirebaseUser tempUser){
+        String uid = tempUser.getUid();
+        dbref = FirebaseDatabase.getInstance().getReference("users").child(uid);
+        dbref.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+                if (!snapshot.exists()) {
+                    startActivity(new Intent(LoginActivity.this,register.class));
+                    finish();
+                }
+                else{
+                    currUser = snapshot.getValue(User.class);
+                    Log.d("Cuser in loginAct",currUser.name);
+                    Log.d("Started from Oncreate","true");
+                    Intent intent = new Intent(LoginActivity.this,MainActivity.class);
+                    intent.putExtra("curruser",currUser);
+                    startActivity(intent);
+                    finish();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 
     @Override
@@ -95,31 +126,9 @@ public class LoginActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithCredential:success");
-                            FirebaseUser user = mAuth.getCurrentUser();
-                            String uid = user.getUid();
-                            dbref = FirebaseDatabase.getInstance().getReference("user");
-                            dbref = dbref.child(uid);
-                            dbref.addListenerForSingleValueEvent(new ValueEventListener() {
-                                @Override
-                                public void onDataChange(DataSnapshot snapshot) {
-                                    if (snapshot.getValue()==null) {
-                                        startActivity(new Intent(LoginActivity.this,register.class));
-                                        finish();
-                                    }
-                                    else{
-                                        //User user = snapshot.getValue(User.class);
-                                        Intent intent = new Intent(LoginActivity.this,MainActivity.class);
-                                        //intent.putExtra("curruser",user);
-                                        startActivity(intent);
-                                        finish();
-                                    }
-                                }
-
-                                @Override
-                                public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                                }
-                            });
+                            user = mAuth.getCurrentUser();
+                            Log.d("User looged in",user.getUid());
+                            getUser(user);
 
                             //finish();
 
@@ -136,11 +145,16 @@ public class LoginActivity extends AppCompatActivity {
 
     protected void onStart() {
         super.onStart();
-        FirebaseUser currentUser = mAuth.getCurrentUser();
-        if(currentUser!=null)
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if(user!=null)
         {
-            startActivity(new Intent(LoginActivity.this,MainActivity.class));
-            finish();
+
+            Log.d("Started from OnStart","true");
+            getUser(user);
+            //Log.d("User in login",currUser.name);
+            //Intent myIntent = new Intent(LoginActivity.this,MainActivity.class);
+            //myIntent.putExtra("currUser",currUser);
+            //startActivity(myIntent);
         }
     }
 }

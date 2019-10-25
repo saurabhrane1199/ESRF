@@ -48,11 +48,12 @@ public class HelpActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_help);
+        //userLoc = new Location("gps");
+        currUser =(User)getIntent().getSerializableExtra("currUser");
         Button btnSend = findViewById(R.id.button);
         tokenList = new ArrayList<>();
-        currUser =(User)getIntent().getSerializableExtra("currUser");
-        userLoc.setLatitude(currUser.latitude);
-        userLoc.setLongitude(currUser.longitude);
+        //userLoc.setLatitude(currUser.latitude);
+        //userLoc.setLongitude(currUser.longitude);
 
         Log.d("Intent Value",currUser.name);
         populateTokenList();
@@ -121,7 +122,7 @@ public class HelpActivity extends AppCompatActivity {
         new com.android.volley.Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        Log.i(TAG, "onResponse: " + response.toString());;
+                        Log.i(TAG, "onResponse: " + response.toString());
                     }
                 },
                 new com.android.volley.Response.ErrorListener() {
@@ -144,12 +145,14 @@ public class HelpActivity extends AppCompatActivity {
 
     private boolean ifLocation(User user){
         float[] distances = new float[1];
+        boolean flag = true;
         Location.distanceBetween(currUser.latitude,
                 currUser.longitude,
                 user.latitude,
                 user.longitude, distances);
-        return 5000.0 < distances[0];
+        //flag = distances[0]<1000.0;
 
+        return flag;
     }
 
     public void tokenByLocation(User temp){

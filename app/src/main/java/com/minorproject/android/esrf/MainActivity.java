@@ -38,20 +38,32 @@ public class MainActivity extends AppCompatActivity {
     public static final String TAG ="Main Activity";
     public String uid;
     public DatabaseReference dbref;
+    private Bundle bundle;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        currUser = (User) getIntent().getSerializableExtra("curruser");
+        Log.d("User in MainAct",currUser.name);
+
         serviceIntent = new Intent(MainActivity.this, LocationBgService.class);
+        serviceIntent.putExtra("curruser",currUser);
+
         handlePermissions();
+
         startService(serviceIntent);
+
         toolBar = getSupportActionBar();
         BottomNavigationView nav = findViewById(R.id.navigation);
         nav.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+        bundle  = new Bundle();
+        bundle.putSerializable("curruser",currUser);
         toolBar.setTitle("Home");
-        loadFragment(new HomeFragment());
+        Fragment frag = new HomeFragment();
+        frag.setArguments(bundle);
+        loadFragment(frag);
     }
 
     @Override
@@ -60,6 +72,9 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences pref = getApplicationContext().getSharedPreferences("tokens", 0); // 0 - for private mode
         statics.token = pref.getString("token_value",null);
     }
+
+
+
 
 
     private void handlePermissions() {
@@ -100,18 +115,21 @@ public class MainActivity extends AppCompatActivity {
             Fragment fragment;
             switch (item.getItemId()) {
                 case R.id.navigation_user:
-                    toolBar.setTitle("Shop");
+                    toolBar.setTitle("User");
                     fragment = new UserFragment();
+                    fragment.setArguments(bundle);
                     loadFragment(fragment);
                     return true;
                 case R.id.navigation_home:
                     toolBar.setTitle("Home");
                     fragment = new HomeFragment();
+                    fragment.setArguments(bundle);
                     loadFragment(fragment);
                     return true;
                 case R.id.navigation_firstAid:
                     toolBar.setTitle("First Aid");
                     fragment = new FirstAid();
+                    fragment.setArguments(bundle);
                     loadFragment(fragment);
                     return true;
             }

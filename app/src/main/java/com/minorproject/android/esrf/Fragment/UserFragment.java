@@ -1,29 +1,44 @@
 package com.minorproject.android.esrf.Fragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.minorproject.android.esrf.MainActivity;
 import com.minorproject.android.esrf.Models.User;
 import com.minorproject.android.esrf.R;
+import com.minorproject.android.esrf.register;
 
 public class UserFragment extends Fragment {
 
     User user;
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    ImageView iv,edit;
+    TextView blodgroup,name,number,ename1,ename2;
+    User currUser;
+    private GoogleSignInAccount acct;
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
 
     private OnFragmentInteractionListener mListener;
 
@@ -31,20 +46,9 @@ public class UserFragment extends Fragment {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment UserFragment.
-     */
-    // TODO: Rename and change types and number of parameters
     public static UserFragment newInstance(String param1, String param2) {
         UserFragment fragment = new UserFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
     }
@@ -53,16 +57,74 @@ public class UserFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+            currUser = (User) getArguments().getSerializable("curruser");
+            Log.d("User in Home Frag",currUser.name);
         }
+
+        acct = GoogleSignIn.getLastSignedInAccount(getActivity());
+
     }
+
+    /*public void setUser(User temp){
+        user = temp;
+    }
+
+    public void setDatachange(){
+        String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        DatabaseReference dbref = FirebaseDatabase.getInstance().getReference("users").child(uid);
+        dbref.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                User temp = dataSnapshot.getValue(User.class);
+                Log.d("Inside User Fragment",temp.name);
+                setUser(temp);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }*/
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_user, container, false);
+        View view = inflater.inflate(R.layout.fragment_user, container, false);
+        iv = (ImageView) view.findViewById(R.id.profileScreen);
+        blodgroup = (TextView)view.findViewById(R.id.bg);
+        name = view.findViewById(R.id.name);
+        ename1 = view.findViewById(R.id.name1);
+        ename2 = view.findViewById(R.id.name2);
+        number = view.findViewById(R.id.number);
+        edit = view.findViewById(R.id.edit);
+        //setDatachange();
+
+        try {
+            Glide.with(getActivity())
+                    .load(acct.getPhotoUrl())
+                    .apply(RequestOptions.circleCropTransform())
+                    .into(iv);
+
+        }catch (NullPointerException e){
+            Toast.makeText(getActivity().getApplication(),"image not found",Toast.LENGTH_LONG).show();
+        }
+
+        blodgroup.setText(currUser.bloodgroup);
+        name.setText(currUser.name);
+        ename1.setText(currUser.er.name1);
+        ename2.setText(currUser.er.name2);
+        number.setText(currUser.number);
+
+        edit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getActivity(), register.class));
+            }
+        });
+
+        return view;
     }
 
     // TODO: Rename method, update argument and hook method into UI event

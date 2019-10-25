@@ -40,7 +40,7 @@ public class LocationBgService extends Service {
     private FirebaseUser firebaseUser;
     private FirebaseAuth auth;
     private DatabaseReference databaseReference;
-    private User user;
+    private User currUser;
     private String uid;
     private double latitude = 0.0, longitude = 0.0, altitude = 0.0;
     private static final String TAG = "LocationBgService";
@@ -67,28 +67,12 @@ public class LocationBgService extends Service {
         firebaseUser = auth.getCurrentUser();
         databaseReference = FirebaseDatabase.getInstance().getReference("users");
         uid = firebaseUser.getUid();
-        //Log.d(TAG,uid);
-
-        userdbref = databaseReference.child(uid);
-        userdbref.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                user = dataSnapshot.getValue(User.class);
-                //Log.d(TAG,"Heyy"+user.name);
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                Log.d(TAG,"Error ocurred"+databaseError.toException());
-            }
-        });
-
-
+        currUser = (User)intent.getSerializableExtra("curruser");
+        Log.d("USER IN LBG SERVICE",currUser.name);
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
         mLocationRequest.setInterval(5000);
         mLocationRequest.setFastestInterval(2000);
         mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-
         mLocationCallback = new LocationCallback() {
             @Override
             public void onLocationResult(LocationResult locationResult) {
@@ -109,6 +93,10 @@ public class LocationBgService extends Service {
                             databaseReference.child(uid).child("latitude").setValue(latitude);
                             databaseReference.child(uid).child("longitude").setValue(longitude);
                             databaseReference.child(uid).child("altitude").setValue(altitude);
+                            statics.currLat = latitude;
+                            statics.currLong = longitude;
+                            Log.d(TAG, "Latitude: " + latitude + "\nLongitude: " + longitude + "\nAltitude: " + altitude);
+
                         }
                         //Log.d(TAG, "Latitude: " + latitude + "\nLongitude: " + longitude + "\nAltitude: " + altitude);
                         mappingInit();
@@ -173,7 +161,8 @@ public class LocationBgService extends Service {
         ArrayList<LatLng> c = new ArrayList<>();
         for(int i=0 ;i<listRes.size() ;i++){
             c = googleMapsObject(listRes.get(i).coords);
-            flag = PolyUtil.containsLocation(19.123182,72.836271,c,true);
+            //flag = PolyUtil.containsLocation(currUser.latitude,currUser.longitude,c,true);
+            flag = PolyUtil.containsLocation(currUser.latitude,currUser.longitude,c,true);
             if(flag)
             {
                 lName = listRes.get(i).name;
@@ -181,7 +170,7 @@ public class LocationBgService extends Service {
             }
         }
         statics.currentLoc = lName;
-        //Log.d(TAG,"So your location is"+lName);
+        Log.d(TAG,"So your location is"+lName);
 
 
     }
