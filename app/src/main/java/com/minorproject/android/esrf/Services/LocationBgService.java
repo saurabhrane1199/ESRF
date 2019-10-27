@@ -156,7 +156,7 @@ public class LocationBgService extends Service {
     }
 
     void getLocationName(ArrayList<com.minorproject.android.esrf.Models.Location> listRes){
-        String lName="Bhavans";
+        String lName="Bhavans Campus";
         boolean flag = false;
         ArrayList<LatLng> c = new ArrayList<>();
         for(int i=0 ;i<listRes.size() ;i++){

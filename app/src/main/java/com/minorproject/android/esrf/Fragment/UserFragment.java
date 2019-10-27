@@ -65,27 +65,6 @@ public class UserFragment extends Fragment {
 
     }
 
-    /*public void setUser(User temp){
-        user = temp;
-    }
-
-    public void setDatachange(){
-        String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        DatabaseReference dbref = FirebaseDatabase.getInstance().getReference("users").child(uid);
-        dbref.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                User temp = dataSnapshot.getValue(User.class);
-                Log.d("Inside User Fragment",temp.name);
-                setUser(temp);
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-    }*/
 
 
     @Override
