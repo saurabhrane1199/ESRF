@@ -63,7 +63,14 @@ public class recieveAlert extends FirebaseMessagingService{
 
     @Override
     public void onMessageReceived(@NonNull RemoteMessage remoteMessage) {
-        final Intent intent = new Intent(this, alertResponseActivity.class);
+        Intent intent = new Intent(this, alertResponseActivity.class);
+        intent.putExtra("username",remoteMessage.getData().get("user"));
+        intent.putExtra("lat",remoteMessage.getData().get("lat"));
+        intent.putExtra("long",remoteMessage.getData().get("long"));
+        intent.putExtra("location",remoteMessage.getData().get("location"));
+
+
+
         NotificationManager notificationManager = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
         int notificationID = new Random().nextInt(3000);
 
@@ -76,11 +83,11 @@ public class recieveAlert extends FirebaseMessagingService{
                 PendingIntent.FLAG_ONE_SHOT);
 
         Bitmap largeIcon = BitmapFactory.decodeResource(getResources(),
-                R.drawable.ic_home_black_24dp);
+                R.drawable.ic_sos);
 
         Uri notificationSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this, ADMIN_CHANNEL_ID)
-                .setSmallIcon(R.drawable.ic_home_black_24dp)
+                .setSmallIcon(R.drawable.ic_sos)
                 .setLargeIcon(largeIcon)
                 .setContentTitle(remoteMessage.getData().get("title"))
                 .setContentText(remoteMessage.getData().get("message"))

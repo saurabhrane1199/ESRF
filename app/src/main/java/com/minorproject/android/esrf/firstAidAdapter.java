@@ -45,13 +45,13 @@ public class firstAidAdapter extends RecyclerView.Adapter<firstAidAdapter.MyView
         firstAidLoc floc = firstAidLocArrayList.get(position);
         holder.name.setText(floc.name);
         holder.type.setText(floc.type.toUpperCase());
-        holder.distance.setText(calcDistance(floc.latitude,floc.longitude)+"m");
+        holder.distance.setText(Float.toString(floc.distance)+"m");
     }
 
 
 
 
-    public String calcDistance(Double lat,Double lon){
+    /*public String calcDistance(Double lat,Double lon){
         String distance;
         float distances[] = new float[1];
         Location.distanceBetween(statics.currLat,
@@ -61,7 +61,7 @@ public class firstAidAdapter extends RecyclerView.Adapter<firstAidAdapter.MyView
         distance = Float.toString(distances[0]);
         return distance;
 
-    }
+    }*/
 
     @Override
     public int getItemCount() {

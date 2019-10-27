@@ -74,7 +74,7 @@ public class LoginActivity extends AppCompatActivity {
         dbref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
-                if (!snapshot.exists()) {
+                if (!snapshot.child("name").exists()) {
                     startActivity(new Intent(LoginActivity.this,register.class));
                     finish();
                 }

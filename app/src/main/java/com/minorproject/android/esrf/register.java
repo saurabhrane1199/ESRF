@@ -46,7 +46,7 @@ public class register extends AppCompatActivity {
         SharedPreferences pref = getApplicationContext().getSharedPreferences("tokens", 0); // 0 - for private mode
         statics.token = pref.getString("token_value",null);
         DatabaseReference dbref = FirebaseDatabase.getInstance().getReference();
-        dbref.child("users").child(uid).child(statics.token);
+        dbref.child("users").child(uid).child("token").setValue(statics.token);
     }
 
     void init(){

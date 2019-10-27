@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -14,6 +15,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.minorproject.android.esrf.Fragment.FirstAid;
+import com.minorproject.android.esrf.Helping_Classes.statics;
 import com.minorproject.android.esrf.Models.firstAidLoc;
 
 import java.util.ArrayList;
@@ -38,6 +40,7 @@ public class FirstAidList extends AppCompatActivity {
         firstAidLocArrayList = new ArrayList<>();
         setFirstAidList();
 
+
     }
 
     public void setFirstAidList(){
@@ -49,7 +52,10 @@ public class FirstAidList extends AppCompatActivity {
                         firstAidLoc floc = temp.getValue(firstAidLoc.class);
                         firstAidLocArrayList.add(temp.getValue(firstAidLoc.class));
                 }
+                computeDistances();
+                sortArray();
                 setcustomAdapter();
+
 
 
             }
@@ -67,5 +73,32 @@ public class FirstAidList extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(FirstAidList.this));
         recyclerView.setAdapter(adapter);
     }
+
+    public void computeDistances(){
+        for(int i=0;i<firstAidLocArrayList.size();i++){
+            firstAidLocArrayList.get(i).distance = calcDistance(firstAidLocArrayList.get(i).latitude,firstAidLocArrayList.get(i).longitude);
+        }
+
+    }
+
+    public void sortArray(){
+        Collections.sort(firstAidLocArrayList);
+    }
+
+
+
+    public float calcDistance(Double lat,Double lon){
+        float distances[] = new float[1];
+        Location.distanceBetween(statics.currLat,
+                statics.currLong,
+                lat,
+                lon, distances);
+
+        return distances[0];
+
+    }
+
+
+
 
 }

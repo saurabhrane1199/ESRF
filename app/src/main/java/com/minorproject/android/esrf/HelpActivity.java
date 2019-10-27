@@ -2,12 +2,18 @@ package com.minorproject.android.esrf;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
+import android.Manifest;
 import android.app.Activity;
+import android.app.PendingIntent;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
+import android.telephony.SmsManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -22,15 +28,19 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ServerValue;
 import com.google.firebase.database.ValueEventListener;
 import com.minorproject.android.esrf.Helping_Classes.statics;
 import com.minorproject.android.esrf.Models.User;
+import com.minorproject.android.esrf.Models.alert;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.DateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -67,6 +77,7 @@ public class HelpActivity extends AppCompatActivity {
 
         Log.d("Intent Value",currUser.name);
         populateTokenList();
+        //sendSms();
         btnSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -79,18 +90,22 @@ public class HelpActivity extends AppCompatActivity {
                 try {
                     notifcationBody.put("title", NOTIFICATION_TITLE);
                     notifcationBody.put("message", NOTIFICATION_MESSAGE);
+                    notifcationBody.put("user", currUser.name);
+                    notifcationBody.put("lat", Double.toString(statics.currLat));
+                    notifcationBody.put("long", Double.toString(statics.currLong));
+                    notifcationBody.put("location", statics.currentLoc);
                     notification.put("registration_ids", jsonArray);
                     notification.put("data", notifcationBody);
                 } catch (JSONException e) {
                     Log.e(TAG, "onCreate: " + e.getMessage() );
                 }
                 Log.d("TOKEN SIZE",Integer.toString(tokenList.size()));
+                alertAuth();
                 sendNotification(notification);
             }
         });
 
     }
-
 
 
     public void populateTokenList(){
@@ -105,7 +120,7 @@ public class HelpActivity extends AppCompatActivity {
                    /*if(temp.name.equals(currUser.er.name1) || temp.name.equals(currUser.er.name2) ){
                         //tokenByName(temp);
                    }*/
-                   if(ifLocation(temp)){
+                   if(ifLocation(temp) /*&& !temp.name.equals(currUser.name)*/){
                        tokenByLocation(temp);
 
                    }
@@ -123,6 +138,14 @@ public class HelpActivity extends AppCompatActivity {
             }
         });
 
+
+    }
+
+    private void alertAuth(){
+        DatabaseReference authRef = FirebaseDatabase.getInstance().getReference().child("alerts");
+        String key= authRef.push().getKey();
+        String dateTime = DateFormat.getDateTimeInstance().format(new Date());
+        authRef.push().setValue(new alert(currUser.name,statics.currentLoc,statics.currLat,statics.currLong,ServerValue.TIMESTAMP,dateTime));
 
     }
 
