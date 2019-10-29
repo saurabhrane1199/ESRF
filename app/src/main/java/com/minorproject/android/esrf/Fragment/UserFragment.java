@@ -12,20 +12,26 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.minorproject.android.esrf.LoginActivity;
 import com.minorproject.android.esrf.MainActivity;
 import com.minorproject.android.esrf.Models.User;
 import com.minorproject.android.esrf.R;
@@ -37,7 +43,9 @@ public class UserFragment extends Fragment {
     ImageView iv,edit;
     TextView blodgroup,name,number,ename1,ename2;
     User currUser;
+    Button logout;
     private GoogleSignInAccount acct;
+    private GoogleSignInClient mclient;
 
 
     private OnFragmentInteractionListener mListener;
@@ -63,6 +71,7 @@ public class UserFragment extends Fragment {
 
         acct = GoogleSignIn.getLastSignedInAccount(getActivity());
 
+
     }
 
 
@@ -78,6 +87,7 @@ public class UserFragment extends Fragment {
         ename2 = view.findViewById(R.id.name2);
         number = view.findViewById(R.id.number);
         edit = view.findViewById(R.id.edit);
+        logout = view.findViewById(R.id.logout);
         //setDatachange();
 
         try {
@@ -103,7 +113,25 @@ public class UserFragment extends Fragment {
             }
         });
 
+
+        logout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FirebaseAuth.getInstance().signOut();
+                signOut();
+
+            }
+        });
+
         return view;
+    }
+    private void signOut(){
+        mclient.signOut().addOnCompleteListener(getActivity(), new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                startActivity(new Intent(getActivity(), LoginActivity.class));
+            }
+        });
     }
 
     // TODO: Rename method, update argument and hook method into UI event

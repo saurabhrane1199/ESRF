@@ -66,46 +66,23 @@ public class HelpActivity extends AppCompatActivity {
         //userLoc = new Location("gps");
         currUser =(User)getIntent().getSerializableExtra("currUser");
         Button btnSend = findViewById(R.id.button);
+        tokenList = new ArrayList<>();
+        handlepermissions();
+        //userLoc.setLatitude(currUser.latitude);
+        //userLoc.setLongitude(currUser.longitude);
+        Log.d("Intent Value",currUser.name);
+        //populateTokenList();
+
+
+    }
+
+    public void renderDailogBox(){
         dialog = new ProgressDialog(HelpActivity.this); // this = YourActivity
         dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         dialog.setTitle("Loading");
         dialog.setMessage("Alerting Emergency Services and People Near You...");
         dialog.setIndeterminate(true);
         dialog.setCanceledOnTouchOutside(false);
-        tokenList = new ArrayList<>();
-        //userLoc.setLatitude(currUser.latitude);
-        //userLoc.setLongitude(currUser.longitude);
-        Log.d("Intent Value",currUser.name);
-        populateTokenList();
-
-        //sendSms();
-        /*btnSend.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.show();
-                NOTIFICATION_TITLE = "Help! "+currUser.name+" is in danger";
-                NOTIFICATION_MESSAGE = "Location : "+statics.currentLoc;
-                JSONObject notification = new JSONObject();
-                JSONObject notifcationBody = new JSONObject();
-                JSONArray  jsonArray = new JSONArray(tokenList);
-                try {
-                    notifcationBody.put("title", NOTIFICATION_TITLE);
-                    notifcationBody.put("message", NOTIFICATION_MESSAGE);
-                    notifcationBody.put("user", currUser.name);
-                    notifcationBody.put("lat", Double.toString(statics.currLat));
-                    notifcationBody.put("long", Double.toString(statics.currLong));
-                    notifcationBody.put("location", statics.currentLoc);
-                    notification.put("registration_ids", jsonArray);
-                    notification.put("data", notifcationBody);
-                } catch (JSONException e) {
-                    Log.e(TAG, "onCreate: " + e.getMessage() );
-                }
-                Log.d("TOKEN SIZE",Integer.toString(tokenList.size()));
-                alertAuth();
-                sendNotification(notification);
-            }
-        });*/
-
     }
 
     public void kind(){
@@ -129,58 +106,57 @@ public class HelpActivity extends AppCompatActivity {
         }
         Log.d("TOKEN SIZE",Integer.toString(tokenList.size()));
         alertAuth();
-        sendSMS();
         sendNotification(notification);
 
     }
 
-    public void sendSMS(){
-        if (ContextCompat.checkSelfPermission(this,Manifest.permission.SEND_SMS) != PackageManager.PERMISSION_GRANTED)
-        {
-            // Permission is not granted
-            // Should we show an explanation?
-            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.READ_CONTACTS))
+    public void sendSMS()
+    {
+        SmsManager smsMgrVar = SmsManager.getDefault();
+        String numbers[] = {"+91"+currUser.er.number1,"+91"+currUser.er.number2};
+        String message = "Help !! I am in Danger";
+        for(String number : numbers){
+            try
             {
-                // Show an explanation to the user *asynchronously* -- don't block
-                // this thread waiting for the user's response! After the user
-                // sees the explanation, try again to request the permission.
+                smsMgrVar.sendTextMessage(number, null,message, null, null);
             }
-            else
+            catch (Exception ErrVar)
             {
-                // No explanation needed; request the permission
-                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_CONTACTS},444);
-
-                // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
-                // app-defined int constant. The callback method gets the
-                // result of the request.
+                ErrVar.printStackTrace();
             }
         }
-        else
-            {
-            // Permission has already been granted
+    }
+
+    private void handlepermissions(){
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.SEND_SMS) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED)
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.SEND_SMS, Manifest.permission.READ_PHONE_STATE},444);
+        else{
+            renderDailogBox();
+            sendSMS();
+            populateTokenList();
+
+
         }
-
-
     }
 
     @Override
     public void onRequestPermissionsResult(int requestCode,String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode,permissions,grantResults);
         switch (requestCode) {
             case 444: {
-                // If request is cancelled, the result arrays are empty.
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    // permission was granted, yay! Do the
-                    // contacts-related task you need to do.
-                } else {
-                    // permission denied, boo! Disable the
-                    // functionality that depends on this permission.
-                }
-                return;
-            }
+                    renderDailogBox();
+                    populateTokenList();
+                    sendSMS();
 
-            // other 'case' lines to check for other
-            // permissions this app might request.
+                } else {
+                    Toast.makeText(this, "Permissions denied", Toast.LENGTH_SHORT).show();
+                    renderDailogBox();
+                    populateTokenList();
+                }
+                break;
+            }
         }
     }
 
