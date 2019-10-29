@@ -12,6 +12,7 @@ import android.graphics.Color;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Bundle;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -64,10 +65,13 @@ public class recieveAlert extends FirebaseMessagingService{
     @Override
     public void onMessageReceived(@NonNull RemoteMessage remoteMessage) {
         Intent intent = new Intent(this, alertResponseActivity.class);
-        intent.putExtra("username",remoteMessage.getData().get("user"));
-        intent.putExtra("lat",remoteMessage.getData().get("lat"));
-        intent.putExtra("long",remoteMessage.getData().get("long"));
-        intent.putExtra("location",remoteMessage.getData().get("location"));
+
+        Bundle b =new Bundle();
+        b.putString("name",remoteMessage.getData().get("user"));
+        b.putDouble("lat",Double.parseDouble(remoteMessage.getData().get("lat")));
+        b.putDouble("long",Double.parseDouble(remoteMessage.getData().get("long")));
+        b.putString("location",remoteMessage.getData().get("location"));
+        intent.putExtras(b);
 
 
 
@@ -78,7 +82,7 @@ public class recieveAlert extends FirebaseMessagingService{
             setupChannels(notificationManager);
         }
 
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         PendingIntent pendingIntent = PendingIntent.getActivity(this , 0, intent,
                 PendingIntent.FLAG_ONE_SHOT);
 

@@ -1,11 +1,18 @@
 package com.minorproject.android.esrf;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.location.Location;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import androidx.recyclerview.widget.RecyclerView;
 import com.minorproject.android.esrf.Helping_Classes.statics;
 import com.minorproject.android.esrf.Models.firstAidLoc;
@@ -18,12 +25,14 @@ public class firstAidAdapter extends RecyclerView.Adapter<firstAidAdapter.MyView
     public class MyViewHolder extends RecyclerView.ViewHolder {
 
         public TextView name,distance,type;
+        public RelativeLayout relativeLayout;
 
         public MyViewHolder(View view) {
             super(view);
             name = (TextView)view.findViewById(R.id.name);
             distance = (TextView)view.findViewById(R.id.distance);
             type = (TextView)view.findViewById(R.id.type);
+            relativeLayout = (RelativeLayout)view.findViewById(R.id.RelativeL);
         }
 
     }
@@ -42,10 +51,47 @@ public class firstAidAdapter extends RecyclerView.Adapter<firstAidAdapter.MyView
 
     @Override
     public void onBindViewHolder(final MyViewHolder holder, int position) {
-        firstAidLoc floc = firstAidLocArrayList.get(position);
+        final firstAidLoc floc = firstAidLocArrayList.get(position);
         holder.name.setText(floc.name);
         holder.type.setText(floc.type.toUpperCase());
         holder.distance.setText(Float.toString(floc.distance)+"m");
+        holder.relativeLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                confirmationDailog(holder,floc);
+            }
+        });
+
+
+
+    }
+
+
+    public void confirmationDailog(final MyViewHolder holder,final firstAidLoc floc){
+        AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+        builder.setTitle("Confirmation Box");
+        builder.setMessage("Click YES to Open Google Maps For Directions Or Else Click No");
+        builder.setCancelable(false);
+        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which)
+            {
+                        Uri gmmIntentUri = Uri.parse("google.navigation:q="+floc.latitude+","+floc.longitude);
+                        Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+                        mapIntent.setPackage("com.google.android.apps.maps");
+                        mContext.startActivity(mapIntent);
+            }
+        });
+        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which)
+            {
+
+            }
+        });
+
+        builder.show();
+
     }
 
 

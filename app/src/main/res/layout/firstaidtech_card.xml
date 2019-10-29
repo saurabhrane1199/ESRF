@@ -42,8 +42,6 @@
                 android:id="@+id/image"
                 android:visibility="gone"
                 android:layout_centerHorizontal="true" />
-
-
         </RelativeLayout>
     </androidx.cardview.widget.CardView>
 

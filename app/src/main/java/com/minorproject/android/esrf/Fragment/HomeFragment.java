@@ -1,6 +1,8 @@
 package com.minorproject.android.esrf.Fragment;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -13,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -62,13 +65,37 @@ public class HomeFragment extends Fragment {
                 @Override
                 public void onClick(View v) {
                     intent.putExtra("currUser", currUser);
-                    startActivity(intent);
+                    confirmDailog();
+                    //startActivity(intent);
                 }
             });
 
         return view;
     }
 
+
+    public void confirmDailog(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setTitle("Alert");
+        builder.setMessage("You are about to alert all the people in your vicinity and Emergency Services !! Are you sure you want to proceed ?");
+        builder.setCancelable(false);
+        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                startActivity(intent);
+            }
+        });
+
+        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        });
+
+        builder.show();
+
+    }
     /*public void getUser(){
 
 
