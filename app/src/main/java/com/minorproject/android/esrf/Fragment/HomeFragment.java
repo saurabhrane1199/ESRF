@@ -75,7 +75,7 @@ public class HomeFragment extends Fragment {
 
 
     public void confirmDailog(){
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(),R.style.AlertDialogCustom);
         builder.setTitle("Alert");
         builder.setMessage("You are about to alert all the people in your vicinity and Emergency Services !! Are you sure you want to proceed ?");
         builder.setCancelable(false);

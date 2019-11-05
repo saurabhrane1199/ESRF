@@ -4,15 +4,20 @@
     android:layout_height="match_parent"
     android:paddingLeft="16dp"
     android:paddingRight="16dp"
-    android:orientation="horizontal"
+    android:orientation="vertical"
     android:gravity="center"
-    android:background="#383838">
+    android:background="@color/greyBackground">
+
+    <ImageView
+        android:layout_width="313dp"
+        android:layout_height="325dp"
+        android:src="@drawable/ic_inf"
+        android:layout_margin="60dp"/>
 
     <com.google.android.gms.common.SignInButton
         android:id="@+id/sign_in_button"
         android:layout_width="212dp"
         android:layout_height="wrap_content" />
-
 
 
 </LinearLayout>

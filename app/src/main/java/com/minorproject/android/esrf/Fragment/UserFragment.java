@@ -23,6 +23,7 @@ import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -69,7 +70,14 @@ public class UserFragment extends Fragment {
             Log.d("User in Home Frag",currUser.name);
         }
 
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id))
+                .requestEmail()
+                .build();
+        mclient = GoogleSignIn.getClient(getActivity(), gso);
         acct = GoogleSignIn.getLastSignedInAccount(getActivity());
+
+
 
 
     }
@@ -126,10 +134,12 @@ public class UserFragment extends Fragment {
         return view;
     }
     private void signOut(){
-        mclient.signOut().addOnCompleteListener(getActivity(), new OnCompleteListener<Void>() {
+
+            mclient.signOut().addOnCompleteListener(getActivity(), new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 startActivity(new Intent(getActivity(), LoginActivity.class));
+                getActivity().finishAffinity();
             }
         });
     }
@@ -154,6 +164,7 @@ public class UserFragment extends Fragment {
         super.onDetach();
         mListener = null;
     }
+
 
     /**
      * This interface must be implemented by activities that contain this

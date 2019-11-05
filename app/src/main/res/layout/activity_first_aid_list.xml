@@ -7,7 +7,7 @@
     android:paddingLeft="10dp"
     android:paddingRight="10dp"
     android:paddingTop="20dp"
-    android:background="@color/cardview_dark_background">
+    android:background="@color/greyBackground">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/my_recycler_view"

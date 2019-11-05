@@ -174,7 +174,7 @@ public class HelpActivity extends AppCompatActivity {
                    /*if(temp.name.equals(currUser.er.name1) || temp.name.equals(currUser.er.name2) ){
                         //tokenByName(temp);
                    }*/
-                   if(ifLocation(temp) && !temp.name.equals(currUser.name)){
+                   if(ifLocation(temp) /*&& !temp.name.equals(currUser.name)*/){
                        tokenByLocation(temp);
 
                    }

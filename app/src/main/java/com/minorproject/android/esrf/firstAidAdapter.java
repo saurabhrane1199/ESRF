@@ -68,7 +68,7 @@ public class firstAidAdapter extends RecyclerView.Adapter<firstAidAdapter.MyView
 
 
     public void confirmationDailog(final MyViewHolder holder,final firstAidLoc floc){
-        AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+        AlertDialog.Builder builder = new AlertDialog.Builder(mContext,R.style.AlertDialogCustom);
         builder.setTitle("Confirmation Box");
         builder.setMessage("Click YES to Open Google Maps For Directions Or Else Click No");
         builder.setCancelable(false);

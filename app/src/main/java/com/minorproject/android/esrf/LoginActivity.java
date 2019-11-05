@@ -81,7 +81,7 @@ public class LoginActivity extends AppCompatActivity {
     public void onStart(){
         super.onStart();
         FirebaseUser curruser = FirebaseAuth.getInstance().getCurrentUser();
-        if(user!=null)
+        if(curruser!=null)
             getUser(curruser);
 
     }

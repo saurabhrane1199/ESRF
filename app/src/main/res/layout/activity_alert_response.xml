@@ -5,8 +5,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:paddingTop="50dp"
+    android:paddingLeft="30dp"
     tools:context=".alertResponseActivity"
-    android:padding="25dp">
+
+    android:background="@color/greyBackground">
 
     <TextView
         android:layout_width="wrap_content"
@@ -14,6 +17,7 @@
         android:text="Name of the Victim:"
         android:textSize="20sp"
         android:layout_marginBottom="8dp"
+        android:textColor="@color/colorAccent"
         android:id="@+id/nameHolder"/>
     <TextView
         android:layout_width="wrap_content"
@@ -22,6 +26,7 @@
         android:textSize="25sp"
         android:layout_margin="5dp"
         android:id="@+id/name"
+        android:textColor="@color/colorAccent"
         android:layout_below="@id/nameHolder"/>
 
     <TextView
@@ -30,6 +35,7 @@
         android:text="Location:"
         android:id="@+id/locationHolder"
         android:textSize="20sp"
+        android:textColor="@color/colorAccent"
         android:layout_marginTop="30dp"
         android:layout_below="@id/name"/>
 
@@ -39,20 +45,21 @@
         android:text="__Location:__"
         android:id="@+id/location"
         android:textSize="25sp"
+        android:textColor="@color/colorAccent"
         android:layout_marginTop="10dp"
         android:layout_below="@id/locationHolder"/>
 
     <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Click to Get Direction"
         android:id="@+id/button"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
         android:layout_below="@id/location"
-        android:layout_margin="50dp"
-        android:layout_centerHorizontal="true"/>
-
-
-
+        android:layout_marginTop="100dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="50dp"
+        android:background="@drawable/button"
+        android:text="Click to Get Direction"
+        android:textColor="@color/colorAccent" />
 
 
 </RelativeLayout>
