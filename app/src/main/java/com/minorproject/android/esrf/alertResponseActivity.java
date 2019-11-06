@@ -44,6 +44,14 @@ public class alertResponseActivity extends AppCompatActivity {
             }
         });
 
-
+        //intent = getIntent();
+        //String username = intent.getStringExtra("user");
+        //String lat = intent.getStringExtra("lat");
+        //String lon = intent.getStringExtra("long");
+        //String location = intent.getStringExtra("location");
+        //Log.d(TAG,username);
+        //Log.d(TAG,lat);
+        //Log.d(TAG,lon);
+        //Log.d(TAG,location);
     }
 }

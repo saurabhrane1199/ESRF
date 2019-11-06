@@ -214,6 +214,7 @@ public class HelpActivity extends AppCompatActivity {
                         Log.i(TAG, "onResponse: " + response.toString());
                         dialog.dismiss();
                         startActivity(new Intent(HelpActivity.this,FirstAidList.class));
+                        finish();
                     }
                 },
                 new com.android.volley.Response.ErrorListener() {
@@ -248,6 +249,7 @@ public class HelpActivity extends AppCompatActivity {
     }
 
     public void tokenByLocation(User temp){
+        Log.d("Users notifies",temp.name);
         tokenList.add(temp.token);
 
     }
