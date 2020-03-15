@@ -6,7 +6,7 @@
     android:paddingRight="16dp"
     android:orientation="vertical"
     android:gravity="center"
-    android:background="@color/greyBackground">
+    android:background="#FFFFFF">
 
     <ImageView
         android:layout_width="313dp"
@@ -17,7 +17,8 @@
     <com.google.android.gms.common.SignInButton
         android:id="@+id/sign_in_button"
         android:layout_width="212dp"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        />
 
 
 </LinearLayout>

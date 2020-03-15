@@ -59,7 +59,6 @@ public class HomeFragment extends Fragment {
         RippleBackground rippleBackground=(RippleBackground)view.findViewById(R.id.content);
         intent = new Intent(getActivity(),HelpActivity.class);
         ImageView iv = (ImageView)view.findViewById(R.id.centerImage);
-
             rippleBackground.startRippleAnimation();
             iv.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -69,10 +68,8 @@ public class HomeFragment extends Fragment {
                     //startActivity(intent);
                 }
             });
-
         return view;
     }
-
 
     public void confirmDailog(){
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(),R.style.AlertDialogCustom);

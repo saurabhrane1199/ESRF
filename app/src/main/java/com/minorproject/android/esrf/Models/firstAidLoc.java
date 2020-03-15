@@ -11,6 +11,11 @@ public class firstAidLoc implements Serializable,Comparable {
     public Double longitude;
     public String type;
     public float distance;
+    @Override
+    public int compareTo(Object o) {
+        float compareDist = ((firstAidLoc)o).distance;
+        return (int)(this.distance - compareDist);
+    }
 
     public firstAidLoc(String name,Double latitude,Double longitude,String type){
         this.name = name;
@@ -22,10 +27,6 @@ public class firstAidLoc implements Serializable,Comparable {
 
     }
 
-    @Override
-    public int compareTo(Object o) {
-        float compareDist = ((firstAidLoc)o).distance;
-        return (int)(this.distance - compareDist);
-    }
+
 
 }

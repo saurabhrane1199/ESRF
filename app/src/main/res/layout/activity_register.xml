@@ -2,13 +2,12 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:paddingTop="20dp"
     android:paddingBottom="20dp"
     android:paddingLeft="16dp"
     android:paddingRight="16dp"
-    android:orientation="vertical"
-    android:background="@color/greyBackground"
-    >
+    android:orientation="vertical">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -18,16 +17,36 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            >
+
+            <ImageView
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_gravity="center_horizontal"
+                android:src="@drawable/ic_user"/>
+
+            <TextView
+                android:id="@+id/welcomeMsg"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Hey XXYYZZ,"
+                android:textStyle="bold"
+                android:layout_gravity="center_horizontal"
+                android:textColor="@color/colorAccent"
+                android:layout_marginTop="40dp"
+                android:textSize="25sp" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Register with your details"
+                android:text="Let's get some details and get you started"
+                android:textAlignment="center"
                 android:layout_gravity="center_horizontal"
                 android:textColor="@color/colorAccent"
-                android:layout_margin="40dp"
-                android:textSize="25sp" />
+                android:layout_margin="10dp"
+                android:textSize="20sp" />
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -40,66 +59,81 @@
                 />
 
             <EditText
-                android:id="@+id/name"
-                android:layout_margin="15dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Enter your name"
-                android:paddingTop="20dp"
-                android:paddingBottom="20dp"
-                android:backgroundTint="@color/colorAccent"
-                android:textColor="@color/colorAccent"
-                android:textColorHint="@color/colorAccent" />
-
-            <EditText
-                android:id="@+id/email"
-                android:layout_margin="15dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Enter your email"
-                android:inputType="textEmailAddress"
-                android:paddingTop="20dp"
-                android:paddingBottom="20dp"
-                android:backgroundTint="@color/colorAccent"
-                android:textColor="@color/colorAccent"
-                android:textColorHint="@color/colorAccent" />
-
-            <EditText
                 android:id="@+id/number"
                 android:layout_margin="15dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Enter your number"
+                android:hint=" Enter your number"
                 android:inputType="phone"
-                android:paddingTop="20dp"
-                android:paddingBottom="20dp"
-                android:backgroundTint="@color/colorAccent"
+                android:paddingTop="12dp"
+                android:paddingBottom="12dp"
+                android:background="@drawable/edittext_custom"
+                android:paddingLeft="10dp"
+                android:drawableLeft="@drawable/ic_phone"
                 android:textColor="@color/colorAccent"
-                android:textColorHint="@color/colorAccent" />
+                android:textColorHint="@color/colorAccent"
+                />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_margin="15dp"
+                android:layout_gravity="center_vertical">
+
+                <ImageView
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:src="@drawable/ic_bg"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Blood Group:"
+                    android:textSize="18sp"
+                    android:textColor="@color/colorAccent"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_gravity="center_vertical"/>
+
+                <Spinner
+                    android:id="@+id/bGSpinner"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:entries="@array/bloodGroup"
+                    android:prompt="@string/prompt" />
+
+
+                <!--                <EditText-->
+<!--                    android:id="@+id/bg"-->
+<!--                    android:layout_margin="15dp"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:hint="BloodGroup"-->
+<!--                    android:inputType="text"-->
+<!--                    android:paddingTop="20dp"-->
+<!--                    android:paddingBottom="20dp"-->
+<!--                    android:backgroundTint="@color/colorAccent"-->
+<!--                    android:textColor="@color/colorAccent"-->
+<!--                    android:textColorHint="@color/colorAccent" />-->
+
+
+
+            </LinearLayout>
+
 
             <EditText
                 android:id="@+id/er1name"
                 android:layout_margin="15dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Er 1 name"
+                android:hint=" Emergency Contact 1 : Name"
                 android:inputType="text"
-                android:paddingTop="20dp"
-                android:paddingBottom="20dp"
-                android:backgroundTint="@color/colorAccent"
-                android:textColor="@color/colorAccent"
-                android:textColorHint="@color/colorAccent" />
-
-            <EditText
-                android:id="@+id/er2name"
-                android:layout_margin="15dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Er 2 name"
-                android:inputType="text"
-                android:paddingTop="20dp"
-                android:paddingBottom="20dp"
-                android:backgroundTint="@color/colorAccent"
+                android:paddingTop="12dp"
+                android:paddingBottom="12dp"
+                android:background="@drawable/edittext_custom"
+                android:paddingLeft="10dp"
+                android:drawableLeft="@drawable/ic_user"
                 android:textColor="@color/colorAccent"
                 android:textColorHint="@color/colorAccent" />
 
@@ -108,50 +142,61 @@
                 android:layout_margin="15dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Er 1 no"
+                android:hint=" Emergency Contact 1 : Number"
                 android:inputType="phone"
-                android:paddingTop="20dp"
-                android:paddingBottom="20dp"
-                android:backgroundTint="@color/colorAccent"
+                android:paddingTop="12dp"
+                android:paddingBottom="12dp"
+                android:paddingLeft="10dp"
+                android:background="@drawable/edittext_custom"
+                android:drawableLeft="@drawable/ic_phone"
+                android:textColor="@color/colorAccent"
+                android:textColorHint="@color/colorAccent" />
+
+            <EditText
+                android:id="@+id/er2name"
+                android:layout_margin="15dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Emergency Contact 2 : Name"
+                android:inputType="text"
+                android:paddingTop="12dp"
+                android:paddingBottom="12dp"
+                android:background="@drawable/edittext_custom"
+                android:paddingLeft="10dp"
+                android:drawableLeft="@drawable/ic_user"
                 android:textColor="@color/colorAccent"
                 android:textColorHint="@color/colorAccent" />
 
             <EditText
                 android:id="@+id/er2no"
-                android:layout_margin="15dp"
-                android:layout_width="337dp"
+                android:layout_width="347dp"
                 android:layout_height="wrap_content"
-                android:hint="Er 2 no"
+                android:layout_margin="15dp"
+                android:background="@drawable/edittext_custom"
+                android:drawableLeft="@drawable/ic_phone"
+                android:hint=" Emergency Contact 2 : Number"
                 android:inputType="phone"
-                android:paddingTop="20dp"
-                android:paddingBottom="20dp"
-                android:backgroundTint="@color/colorAccent"
+                android:paddingLeft="10dp"
+                android:paddingTop="12dp"
+                android:paddingBottom="12dp"
                 android:textColor="@color/colorAccent"
                 android:textColorHint="@color/colorAccent" />
 
-            <EditText
-                android:id="@+id/bg"
-                android:layout_margin="15dp"
-                android:layout_width="match_parent"
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:hint="BloodGroup"
-                android:inputType="text"
-                android:paddingTop="20dp"
-                android:paddingBottom="20dp"
-                android:backgroundTint="@color/colorAccent"
-                android:textColor="@color/colorAccent"
-                android:textColorHint="@color/colorAccent" />
-
+                android:layout_gravity="center_horizontal">
             <Button
                 android:layout_width="150dp"
                 android:layout_gravity="center_horizontal"
                 android:layout_height="wrap_content"
                 android:id="@+id/submit"
-                android:layout_margin="15dp"
                 android:text="Submit"
                 android:background="@drawable/button"
                 android:textColor="@color/colorAccent"
                 android:textColorHint="@color/colorAccent"/>
+            </androidx.cardview.widget.CardView>
 
 
 

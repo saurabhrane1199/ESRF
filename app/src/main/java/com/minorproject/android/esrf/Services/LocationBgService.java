@@ -156,12 +156,11 @@ public class LocationBgService extends Service {
     }
 
     void getLocationName(ArrayList<com.minorproject.android.esrf.Models.Location> listRes){
-        String lName="Bhavans Campus";
+        String lName="SPIT";
         boolean flag = false;
         ArrayList<LatLng> c = new ArrayList<>();
         for(int i=0 ;i<listRes.size() ;i++){
             c = googleMapsObject(listRes.get(i).coords);
-            //flag = PolyUtil.containsLocation(currUser.latitude,currUser.longitude,c,true);
             flag = PolyUtil.containsLocation(currUser.latitude,currUser.longitude,c,true);
             if(flag)
             {

@@ -6,8 +6,7 @@
     android:paddingBottom="10dp"
     android:paddingLeft="10dp"
     android:paddingRight="10dp"
-    android:paddingTop="20dp"
-    android:background="@color/greyBackground">
+    android:paddingTop="20dp">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/my_recycler_view"

@@ -40,7 +40,6 @@ public class MainActivity extends AppCompatActivity {
     public DatabaseReference dbref;
     private Bundle bundle;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -74,10 +73,6 @@ public class MainActivity extends AppCompatActivity {
         statics.token = pref.getString("token_value",null);
         tokenref.setValue(statics.token);
     }
-
-
-
-
 
     private void handlePermissions() {
         int locationRequestCode = 1000;
